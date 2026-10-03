@@ -6,13 +6,12 @@ import (
 	"github.com/roadrunner-server/errors"
 )
 
-// responseReserve is the time kept aside for the Runtime API response once the
-// invocation handlers have stopped.
+// responseReserve is kept aside for the Runtime API response after the handlers stop.
 const responseReserve = time.Second
 
 type Config struct {
-	// ShutdownBuffer is reserved before the invocation deadline so that every
-	// handler can stop and the Runtime API answer still fits.
+	// ShutdownBuffer is reserved before the deadline for stopping the handlers
+	// and answering the Runtime API.
 	ShutdownBuffer time.Duration `mapstructure:"shutdown_buffer"`
 	// GracefulTimeout is how long a handler may drain its in-flight work.
 	GracefulTimeout time.Duration `mapstructure:"graceful_timeout"`

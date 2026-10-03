@@ -1,7 +1,6 @@
-// Package lambda runs RoadRunner inside an AWS Lambda custom runtime. It serves
-// the Lambda Runtime API and hands every invocation to the plugins that
-// implement Invokable, so a plugin only has to say how it starts and stops its
-// work for the duration of one invocation.
+// Package awslambda runs RoadRunner inside an AWS Lambda custom runtime: it
+// serves the Lambda Runtime API and hands every invocation to the plugins that
+// implement Invokable.
 package awslambda
 
 import (
@@ -25,13 +24,11 @@ const (
 // instead of running forever. The plugin is never imported by them: endure
 // matches the methods, the same way the resetter plugin collects Resetter.
 type Invokable interface {
-	// StartInvocation begins the work for one invocation. The handler gets the
-	// graceful budget up front, because a handler usually has to configure its
-	// own machinery with it rather than react to a deadline on stop.
+	// StartInvocation begins the work for one invocation, within the graceful
+	// budget the handler will be given to drain.
 	StartInvocation(ctx context.Context, graceful time.Duration) error
 	// StopInvocation drains it before the deadline.
 	StopInvocation(ctx context.Context) error
-	// Name of the plugin.
 	Name() string
 }
 
@@ -107,8 +104,6 @@ func (p *Plugin) Name() string {
 	return pluginName
 }
 
-// handle runs one invocation: start every handler, keep them working until the
-// deadline minus the shutdown buffer, then stop them.
 func (p *Plugin) handle(ctx context.Context) error {
 	const op = errors.Op("lambda_invocation")
 
