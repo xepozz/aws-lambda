@@ -52,7 +52,7 @@ arch = "arm64"
 
 [plugins.lambda]
 tag = "master"
-module_name = "github.com/roadrunner-server/aws-lambda"
+module_name = "github.com/roadrunner-server/aws-lambda/v6"
 
 [plugins.temporal]
 tag = "latest"

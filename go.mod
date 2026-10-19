@@ -1,4 +1,4 @@
-module github.com/roadrunner-server/aws-lambda
+module github.com/roadrunner-server/aws-lambda/v6
 
 go 1.27
 
